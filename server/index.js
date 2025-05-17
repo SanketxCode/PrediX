@@ -26,6 +26,10 @@ app.use('/api/orderbook',orderBookRoutes);
 const orderRoutes =  require('./routes/order.js');
 app.use('/api/orders',orderRoutes);
 
+const tradeRoutes = require('./routes/trade.js');
+app.use('/api/trades', tradeRoutes);
+
+
 const PORT = 4000;
 
 app.listen(PORT,()=>{
