@@ -1,5 +1,6 @@
 const supabase = require('../supaBaseClient')
 const tradematchingService = require('../services/tradeMatchingService');
+const { sendOrderBookUpdates } = require('../websocket/websocketServer');
 
 
 // place an order and add it to the orders db
@@ -42,7 +43,8 @@ const placeOrder = async( req,res) => {
         .delete()
         .eq('id',newOrder.id);
     }
-
+    
+    sendOrderBookUpdates(market_id);
     return res.status(201).json({
       message: 'Order placed and matched',
       originalOrder: newOrder,

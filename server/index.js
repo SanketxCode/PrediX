@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const supabase = require('./supaBaseClient');
+const { wss } = require('./websocket/websocketServer.js');
+
 
 const app  =  express();
 
@@ -35,3 +37,7 @@ const PORT = 4000;
 app.listen(PORT,()=>{
   console.log(`Server is running on PORT:${PORT}`);
 })
+
+wss.on('listening', () => {
+  console.log('WebSocket server running on port 8080');
+});
