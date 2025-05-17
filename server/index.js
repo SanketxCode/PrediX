@@ -20,6 +20,9 @@ app.get('/test-supabase', async (req, res) => {
 const marketRoutes = require('./routes/market.js');
 app.use('/api/markets', marketRoutes);
 
+const orderRoutes =  require('./routes/orderBook.js');
+app.use('/api/orderbook',orderRoutes);
+
 const PORT = 4000;
 
 app.listen(PORT,()=>{
