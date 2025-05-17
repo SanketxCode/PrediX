@@ -1,4 +1,5 @@
 const supabase = require('../supaBaseClient')
+const tradematchingService = require('../services/tradeMatchingService');
 
 
 // place an order and add it to the orders db
@@ -15,14 +16,43 @@ const placeOrder = async( req,res) => {
     }
 
 
-    const {data,error}  = await supabase
+    const {insertedOrders,error}  = await supabase
         .from('orders')
         .insert([{market_id,side,price,amount}])
         .select();
 
     if(error) return res.status(500).json({error:error.message});
 
-    res.status(201).json(data);
+    const newOrder  = insertedOrders[0];
+    try{
+     
+    const remainingAmount = await tradematchingService.matchOrders(newOrder);
+
+
+    if(remainingAmount > 0)
+    {
+        await supabase.
+        from('orders')
+        .update({amount:remainingAmount})
+        .eq('id',newOrder.id);
+    }
+    else{
+        await supabase
+        .from('orders')
+        .delete()
+        .eq('id',newOrder.id);
+    }
+
+    return res.status(201).json({
+      message: 'Order placed and matched',
+      originalOrder: newOrder,
+      remainingAmount
+    });
+
+ }catch (matchError) {
+    return res.status(500).json({ error: matchError.message });
+  }
+
 };
 
 
@@ -65,7 +95,7 @@ const cancelOrder = async(req,res) =>{
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        
+
     if(error) return res.status(500).json({error:error.message});
 
     return res.status(200).json({message : ' Order Cancelled Successfully ',data});

@@ -4,7 +4,8 @@ const supabase = require('../supaBaseClient');
     const getOrderBook =   async (req,res) => {
 
         const {market_id} = req.params;
-        console.log('Market ID type:', typeof market_id, market_id);
+
+
         if(!market_id)
         {
             return res.status(400).json({ error :' Market ID is required '});
@@ -16,10 +17,8 @@ const supabase = require('../supaBaseClient');
             .select('side,price,amount')
             .eq('market_id',market_id);
 
-            console.log('Orders data:', data);
-        if(error) 
-            return res.status(500).json({error: error.message});
 
+        if(error) return res.status(500).json({error: error.message});
 
         //group and sum amount by side+price
 
@@ -34,7 +33,21 @@ const supabase = require('../supaBaseClient');
             orderBook[key].totalAmount += amount;
         });
 
-        res.json(Object.values(orderBook));
+       const grouped  = Object.values(orderBook).reduce(
+        (acc, order) => 
+            {
+                const sideKey = order.side === 'yes' ? 'buy' : 'sell';
+                acc[sideKey].push({price: order.price, totalAmount: order.totalAmount});
+                return acc;
+            },
+        { buy: [], sell: [] }
+    );
+
+       grouped.buy.sort((a,b) => b.price - a.price); // descending
+       grouped.sell.sort((a,b) => a.price - b.price); // ascending
+
+
+        res.json(grouped);
 
    };
 

@@ -24,4 +24,25 @@ const createTrade  =  async( req, res) =>{
 
 };
 
-module.exports = { createTrade};
+
+const getTradesByMarket = async (req,res) =>{
+    const { market_id} = req.params;
+
+    if(!market_id)
+    {
+        return res.status(400).json({error : 'market_id is required !'});
+    }
+
+    const {data ,error} = await supabase
+    .from('trades')
+    .select('*')
+    .eq('market_id',market_id)
+    .order('created_date',{ascending : false});
+
+
+    if(error) return res.status(500).json({ error : error.message});
+
+    res.json(data);
+}
+
+module.exports = { createTrade,getTradesByMarket};
