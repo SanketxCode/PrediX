@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const supabase = require('./supabaseClient');
+const supabase = require('./supaBaseClient');
 
 const app  =  express();
 
@@ -17,7 +17,7 @@ app.get('/test-supabase', async (req, res) => {
   res.json(data);
 });
 
-const marketRoutes = require('./routes/markets');
+const marketRoutes = require('./routes/market.js');
 app.use('/api/markets', marketRoutes);
 
 const PORT = 4000;
