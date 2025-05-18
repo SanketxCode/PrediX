@@ -1,3 +1,4 @@
+import Events from "./pages/Events"
 import WebSocketComponent from "./WebSocketComponent"
 
 function App() {
@@ -6,8 +7,8 @@ function App() {
     <>
    
   <div className="App">
-    <h1>Predix App</h1>
-    <WebSocketComponent/>
+    {/* <WebSocketComponent/> */}
+    <Events/>
     </div>    
     </>
   )
