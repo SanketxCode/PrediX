@@ -1,12 +1,14 @@
+import WebSocketComponent from "./WebSocketComponent"
 
 function App() {
 
   return (
     <>
-     <h1 class="text-3xl font-bold underline">
-    Hello worl
-  </h1>
-       
+   
+  <div className="App">
+    <h1>Predix App</h1>
+    <WebSocketComponent/>
+    </div>    
     </>
   )
 }
