@@ -19,8 +19,7 @@ const supabase = require('../supaBaseClient');
 
 
         if(error) return res.status(500).json({error: error.message});
-
-        //group and sum amount by side+price
+         //group and sum amount by side+price
 
         const orderBook ={};
 
