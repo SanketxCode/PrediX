@@ -1,17 +1,19 @@
-import Events from "./pages/Events"
-import WebSocketComponent from "./WebSocketComponent"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Events from "./pages/Events";
+import EventDetails from "./pages/EventsDetail";
+import WebSocketComponent from "./WebSocketComponent";
 
 function App() {
-
   return (
-    <>
-   
-  <div className="App">
-    {/* <WebSocketComponent/> */}
-    <Events/>
-    </div>    
-    </>
-  )
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route path="/events" element={<Events />} />
+          <Route path="/events/:id" element={<EventDetails />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

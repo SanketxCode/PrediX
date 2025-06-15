@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const supabase = require('./supaBaseClient');
-const { wss } = require('./websocket/websocketServer.js');
+const { setupWebSocket } = require('./websocket/websocketServer.js'); // MODIFY THIS
+
+const http = require('http'); // ADD THIS
 
 
 const app  =  express();
@@ -34,10 +36,18 @@ app.use('/api/trades', tradeRoutes);
 
 const PORT = 4000;
 
-app.listen(PORT,()=>{
-  console.log(`Server is running on PORT:${PORT}`);
-})
+const server = http.createServer(app); // CREATE HTTP SERVER
 
-wss.on('listening', () => {
-  console.log('WebSocket server running on port 8080');
+// Start WebSocket server on same HTTP server
+setupWebSocket(server); // START WEBSOCKET ON SAME SERVER
+
+server.listen(PORT, () => {
+  console.log(`Server (HTTP + WebSocket) running on PORT ${PORT}`);
 });
+// app.listen(PORT,()=>{
+//   console.log(`Server is running on PORT:${PORT}`);
+// })
+
+// wss.on('listening', () => {
+//   console.log('WebSocket server running on port 8080');
+// });

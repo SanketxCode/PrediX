@@ -7,7 +7,7 @@ const PlaceOrderBox = ({ onPlaceOrder }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!price || amount) return;
+    if (!price || !amount) return;
 
     onPlaceOrder({
       side,

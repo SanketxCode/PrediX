@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { EventCard } from "../components/EventCard"
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function  Events   (){
 
     const [events,setEvents] = useState([]);
+    const navigate = useNavigate();
+
     const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
      console.log(`${BACKEND_BASE_URL}/api/markets`);
 
@@ -29,8 +33,12 @@ export default function  Events   (){
 
   fetchEvents();
     },[])
+
+
+
     return(
-         <div className="min-h-screen bg-gray-100 py-10 px-6">
+         <div 
+         className="min-h-screen bg-gray-100 py-10 px-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-indigo-700 mb-10">
           📊 Trending Prediction Markets
@@ -42,7 +50,14 @@ export default function  Events   (){
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {events.map((event) => (
+               <div
+                key={event.id}
+                onClick={() => navigate(`/events/${event.id}`)}
+                className="cursor-pointer"
+              >
               <EventCard key={event.id} event={event} />
+                  </div>
+
             ))}
           </div>
         )}
