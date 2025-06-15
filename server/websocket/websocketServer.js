@@ -17,9 +17,7 @@ function setupWebSocket(server) {
         if (action === 'subscribe' && market_id) {
           clients.get(ws).add(market_id);
           ws.send(JSON.stringify({ status: 'subscribed', market_id }));
-            sendOrderBookUpdates(market_id);
-            console.log(market_id);
-            
+            sendOrderBookUpdates(market_id);            
         } else if (action === 'unsubscribe' && market_id) {
           clients.get(ws).delete(market_id);
           ws.send(JSON.stringify({ status: 'unsubscribed', market_id }));

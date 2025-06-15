@@ -35,6 +35,13 @@ const getMarketSummary = async (req, res) => {
   if (!market_id) return res.status(400).json({ error: 'Market ID required' });
 
   try {
+
+    const { data:marketData , error } = await supabase
+    .from('markets')
+    .select('*')
+    .eq('id', market_id)
+    .single();
+
     // Sum amounts for yes and no sides
     const { data: yesOrders } = await supabase
       .from('orders')
@@ -93,6 +100,9 @@ const getMarketSummary = async (req, res) => {
       bestNo: bestNoOrder?.[0]?.price || null,
       ltp,
       totalVolume,
+      question : marketData.question,
+      deadline : marketData.deadline
+
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
